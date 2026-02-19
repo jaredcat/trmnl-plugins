@@ -1,5 +1,6 @@
 {% assign chart_id = "rating_1" | append_random %}
 <div class="layout layout--col">
+{% if dealInfo %}
   <div class="item">
     <div class="content gap--xsmall">
       <span class="title">{{ dealInfo.title }}</span>
@@ -55,3 +56,10 @@
   createGauge({{ dealInfo.steamRatingPercent | default: 0 }}, "{{ chart_id }}", opts)
   {% endif %}
 </script>
+{% else %}
+  <div class="flex flex--col flex--center gap--small" style="padding: 1rem;">
+    <span class="label">No deals match your filters.</span>
+    <span class="label label--muted">{{ filteredCount }} of {{ totalDeals }} passed.</span>
+  </div>
+{% endif %}
+</div>

@@ -14,7 +14,7 @@ custom_fields:
   field_type: author_bio
   category: games,personal
   github_url: https://github.com/jaredcat/trmnl-plugins
-  description: Displays personalized Steam deals that you don't own!<br/><br/>CheapShark API <a href="https://apidocs.cheapshark.com/#b9b738bf-2916-2a13-e40d-d05bccdce2ba" class="underline">CheapShark API</a><br/>Originally forked from <a href="https://trmnl.com/recipes/18131" class="underline">Steam Deals of the Day</a>
+  description: Displays personalized Steam deals that you don't own!<br/><br/>Info about some of the setttings <a href="https://apidocs.cheapshark.com/#b9b738bf-2916-2a13-e40d-d05bccdce2ba" class="underline">CheapShark API</a><br/>Originally forked from <a href="https://trmnl.com/recipes/18131" class="underline">Steam Deals of the Day</a>
 
 - keyname: steam_api_key
   field_type: string
