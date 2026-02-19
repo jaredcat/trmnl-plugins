@@ -1,0 +1,31 @@
+<div class="layout layout--col">
+  <div class="item">
+    <div class="content gap--xsmall">
+      <span class="title">{{ dealInfo.title }}</span>
+      <div class="flex flex--row gap--xsmall flex--center-y">
+        <img class="image w--5 h--5" src="{{ dealInfo.storeIconUrl }}" alt="" aria-hidden="true">
+        <span class="label">{{ dealInfo.storeName }}</span>
+      </div>
+      <span class="label label--inverted">{{ dealInfo.steamRatingText | default: "no reviews" }}</span>
+    </div>
+  </div>
+  <span class="value value--xlarge value--tnums">{{ dealInfo.salePrice | default 0 | number_to_currency }}</span>
+  <div class="grid grid--cols-2">
+    <div class="item">
+      <div class="meta"></div>
+      <div class="content">
+        <span class="value value--small value--tnums " data-fit-value="true">{{ dealInfo.savings | default 0 | round }}% off</span>
+        <span class="label">Was {{ dealInfo.normalPrice | default 0 | number_to_currency }}</span>
+      </div>
+    </div>
+    <div class="item">
+      <div class="meta"></div>
+      <div class="content">
+        <span class="value value--small value--tnums" data-fit-value="true">{{ dealInfo.dealRating | default 0 | round }}/10</span>
+        <span class="label">Deal rating</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+

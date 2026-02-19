@@ -1,0 +1,46 @@
+---
+description: TRMNL custom plugin form builder (settings.yml fields)
+globs: "**/*.liquid,**/transform.js,**/settings.yml"
+alwaysApply: false
+---
+
+# TRMNL Custom Plugin Form Builder
+
+Reference: [Custom plugin form builder](https://help.trmnl.com/en/articles/10513740-custom-plugin-form-builder)
+
+## Basics
+
+- Form fields are defined in YAML in plugin settings. Each field: **keyname** (identifier), **name** (label), **field_type** (type).
+- Indent with 2 spaces; each field starts with `-` (block sequence).
+- Values in markup: `##{{ trmnl.plugin_settings.custom_fields_values }}` → e.g. `{ "password": "secret", "lookback_period": "7" }`.
+- In Polling URL/headers, use keyname directly: `https://api.example.com?access_token=##{{ api_key }}`.
+
+## Required per field
+
+- `keyname`, `name`, `field_type`
+
+## Optional (all types)
+
+- `description`, `description-LOCALE`, `help_text`, `optional` (default false = required), `default`
+- Type-specific: `rows`, `options`, `value`, `min`/`max`/`step`, `maxlength`, `placeholder`, `endpoint`, `http_verb`
+
+## Field types (summary)
+
+- **Input**: `string`, `multi_string`, `text`, `code`, `number`, `password`, `url`, `date`, `time`
+- **Choice**: `select`, `xhrSelect`, `xhrSelectSearch`, `plugin_instance_select`, `time_zone`
+- **Other**: `boolean`, `author_bio`, `copyable`, `copyable_webhook_url`
+
+Select default for "No": use `default: "no"` (quoted) or it’s truthy. Date default: `default: "today"` or `"YYYY-MM-DD"`.
+
+## Conditional validation
+
+- **Visibility**: `conditional_validation` with `when: <value>` and `hidden: [keyname1, keyname2]`.
+- **Required**: same structure with `required: [keyname]` so different fields are required depending on parent value.
+
+## xhrSelect / depends_on
+
+- Child field: `depends_on: parent_keyname`, `endpoint` can use `##{{ parent_keyname }}`. Parent value is also in POST body as `settings_custom_fields_values_<keyname>`.
+
+## Troubleshooting
+
+- Invalid YAML → fields ignored, no error. Use TRMNL’s inline syntax checker or [yaml-online-parser](https://yaml-online-parser.appspot.com/).

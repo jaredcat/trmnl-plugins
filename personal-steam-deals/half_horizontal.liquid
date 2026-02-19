@@ -1,0 +1,72 @@
+{% assign chart_id = "rating_1" | append_random %}
+<div class="layout layout--col">
+  <div class="item">
+    <div class="content gap--xsmall">
+      <span class="title">{{ dealInfo.title }}</span>
+      <div class="flex flex--row gap--xsmall flex--center-y">
+        <img class="image w--5 h--5" src="{{ dealInfo.storeIconUrl }}" alt="" aria-hidden="true">
+        <span class="label">{{ dealInfo.storeName }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid--cols-3">
+    <div class="col col--start">
+      <img class="image image-dither image--contain w--70 h--28" src="{{ dealInfo.thumb }}" alt="">    
+    </div>
+    <div class="col col--center">
+      <div class="w--full">
+        <div id="{{ chart_id }}" class="w--50 h--28"></div>
+        <div class="flex flex--col flex--center w--full">
+          {{ steam_rating_label }}
+        </div>
+      </div>
+    </div>
+    <div class="col col--end gap--small">
+      <span class="value value--large value--tnums">{{ dealInfo.salePrice | default 0 | number_to_currency }}</span>
+
+      <div class="grid">
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--small value--tnums " data-fit-value="true">{{ dealInfo.savings | default 0 | round }}% off</span>
+            <span class="label">Was {{ dealInfo.normalPrice | default 0 | number_to_currency }}</span>
+          </div>
+        </div>
+        <div class="item">
+          <div class="meta"></div>
+          <div class="content">
+            <span class="value value--small value--tnums" data-fit-value="true">{{ dealInfo.dealRating | default 0 | round }}/10</span>
+            <span class="label">Deal rating</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="text/javascript">
+  let opts = {
+    title: null,
+    labels: { enabled: false },
+    height: "50%",
+    series: {
+      fontSize: "16px",
+      fontWeight: "400",
+      fontFamily: "NicoClean"
+    },
+    yAxis: {
+      title: null
+    }
+  }
+
+  {% if dealInfo.steamRatingPercent == "0" %}
+  createGauge({{ dealInfo.metacriticScore | default: 0 }}, "{{ chart_id }}", opts)
+  {% else %}
+  createGauge({{ dealInfo.steamRatingPercent | default: 0 }}, "{{ chart_id }}", opts)
+  {% endif %}
+</script>

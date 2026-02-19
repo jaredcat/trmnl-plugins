@@ -1,0 +1,151 @@
+---
+strategy: polling
+no_screen_padding: 'no'
+dark_mode: 'no'
+static_data: ''
+polling_verb: get
+polling_url: "https://www.cheapshark.com/api/1.0/deals?storeID={{ store_ids | default: \"1,3,11,15\" }}&pageSize=100&maxAge={{ max_age | default: \"24\" }}&upperPrice={{ upper_price | default: \"15\" }}&lowerPrice={{ lower_price | default: \"0\" }}&metacritic={{ metacritic | default: \"1\" }}&steamRating={{ steam_rating | default: \"1\" }}&minimumReviewCount={{ minimum_review_count | default: \"0\" }}&AAA={{ aaa | default: \"0\" }}&sortBy={{ sort_by | default: \"DealRating\" }}&desc={{ desc | default: \"0\" }}\r\nhttps://api.steampowered.com/IPlayerService/GetOwnedGames/v0001/?key={{ steam_api_key }}&steamid={{ steam_id }}&format=json"
+polling_headers: ''
+polling_body: ''
+id: 246930
+custom_fields:
+- keyname: info
+  name: Info
+  field_type: author_bio
+  category: games,personal
+  github_url: https://github.com/jaredcat/trmnl-plugins
+  description: Displays personalized Steam deals that you don't own!<br/><br/>CheapShark API <a href="https://apidocs.cheapshark.com/#b9b738bf-2916-2a13-e40d-d05bccdce2ba" class="underline">CheapShark API</a><br/>Originally forked from <a href="https://trmnl.com/recipes/18131" class="underline">Steam Deals of the Day</a>
+
+- keyname: steam_api_key
+  field_type: string
+  name: Steam API Key
+  description: Get your key from <a href="https://steamcommunity.com/dev/apikey" class="underline">steamcommunity.com/dev/apikey</a>
+  placeholder: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+  help_text: Required for fetching your owned games. Keep it private.
+- keyname: steam_id
+  field_type: string
+  name: Steam ID
+  description: Your 17-digit Steam ID (e.g. from steamid.io or your profile URL)
+  placeholder: 7XXXXXXXXXXXXXXXXX
+  help_text: Find yours at <a href="https://steamid.io/" class="underline">steamid.io</a>. Profile and Game details must be public.
+- keyname: store_ids
+  field_type: string
+  name: Store IDs
+  description: Comma separated list of store ID's to filter on. If not set, all stores will be shown.
+  placeholder: '1,3,11,15'
+  default: '1,3,11,15'
+  optional: true
+  help_text: 1=Steam, 3=GreenManGaming, 11=Humble, 15=Fanatical. <a href="https://apidocs.cheapshark.com/#a2620d3f-683e-0396-61e7-3fe4d30ea376" class="underline">Full list</a>.
+- keyname: max_age
+  field_type: number
+  name: Max Deal Age (hours)
+  description: Filters to deals found within the specified number of hours
+  placeholder: 24
+  default: 24
+  min: 1
+  max: 2500
+  optional: true
+  help_text: CheapShark API name `maxAge`
+- keyname: upper_price
+  field_type: number
+  name: Upper Price (USD)
+  description: Only returns deals with a price less than or equal to this value (50 acts the same as no limit)
+  placeholder: 15
+  default: 15
+  min: 0
+  optional: true
+  help_text: CheapShark API name `upperPrice`
+- keyname: lower_price
+  field_type: number
+  name: Lower Price (USD)
+  description: Only returns deals with a price greater than this value
+  placeholder: 0
+  default: 0
+  min: 0
+  optional: true
+  help_text: CheapShark API name `lowerPrice`
+- keyname: metacritic
+  field_type: number
+  name: Min Metacritic
+  description: Minimum Metacritic rating for a game
+  placeholder: 0
+  default: 0
+  min: 0
+  max: 100
+  optional: true
+  help_text: CheapShark API name `metacritic`
+- keyname: steam_rating
+  field_type: number
+  name: Min Steam Rating
+  description: Minimum Steam reviews rating for a game
+  placeholder: 0
+  default: 0
+  min: 0
+  max: 100
+  optional: true
+  help_text: CheapShark API name `steamRating`
+- keyname: minimum_review_count
+  field_type: number
+  name: Minimum Review Count
+  description: Minimum number of Steam reviews for a game
+  placeholder: 0
+  default: 0
+  min: 0
+  optional: true
+  help_text: CheapShark API name `minimumReviewCount`
+- keyname: aaa
+  field_type: boolean
+  name: AAA Only
+  description: Enable to include only deals with retail price > $29
+  placeholder: false
+  default: false
+  optional: true
+  help_text: CheapShark API name `AAA`
+- keyname: sort_by
+  field_type: select
+  name: Sort By
+  description: sortBy. Order results by this field.
+  options:
+  - DealRating
+  - Title
+  - Savings
+  - Price
+  - Metacritic
+  - Reviews
+  - ReviewCount
+  - Release
+  - Store
+  - Recent
+  default: dealrating
+  optional: true
+  help_text: CheapShark API name `sortBy`
+- keyname: desc
+  field_type: boolean
+  name: Sort Descending
+  description: Set to enable to sort in ascending order
+  placeholder: false
+  default: false
+  optional: true
+  help_text: CheapShark API name `desc`
+- keyname: min_savings
+  field_type: number
+  name: Min Discount %
+  description: Minimum savings percentage (applied in transform after fetch).
+  placeholder: 0
+  default: 0
+  min: 0
+  max: 100
+  optional: true
+  help_text: Deals with savings below this are filtered out.
+- keyname: min_deal_rating
+  field_type: number
+  name: Min Deal Rating
+  description: dealRating. Minimum deal rating (applied in transform).
+  placeholder: 0
+  default: 0
+  min: 0
+  max: 10
+  optional: true
+  help_text: Deals below this rating are filtered out.
+name: Personal Steam Deals
+refresh_interval: 1440

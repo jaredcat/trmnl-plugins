@@ -1,0 +1,136 @@
+<!-- import Highcharts libraries (TRMNL CDN) -->
+<script src="https://trmnl.com/js/highcharts/12.3.0/highcharts.js"></script>
+<script src="https://trmnl.com/js/highcharts/12.3.0/highcharts-more.js"></script>
+<script src="https://trmnl.com/js/highcharts/12.3.0/pattern-fill.js"></script>
+
+{% capture title_bar %}
+<div class="title_bar">
+  <img class="image" src="https://upload.wikimedia.org/wikipedia/commons/8/83/Steam_icon_logo.svg" />
+  <span class="title">Random Steam Deals</span>
+</div>
+{% endcapture %}
+
+{% capture steam_rating_label %}
+{% if dealInfo.steamRatingText == null %}
+{% assign metacriticScore = dealInfo.metacriticScore | ceil %}
+{% if metacriticScore > 95 %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Overwhelmingly Positive</span></div>
+{% elsif metacriticScore >= 90 %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Very Positive</span></div>
+{% elsif metacriticScore >= 70 %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Mostly Positive</span></div>
+{% elsif metacriticScore >= 60 %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Positive</span></div>
+{% elsif metacriticScore >= 45 %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Mixed</span></div>
+{% elsif metacriticScore >= 40 %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Mostly Negative</span></div>
+{% elsif metacriticScore >= 30 %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Very Negative</span></div>
+{% elsif metacriticScore <= 30 and metacriticScore > 0 %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Overwhelmingly Negative</span></div>
+{% else %}
+<div class="flex flex--center"><span class="label label--inverted text--center">Not enough reviews</span></div>
+{% endif %}
+{% else %}
+<div class="flex flex--center"><span class="label label--inverted text--center">{{ dealInfo.steamRatingText | default: "Not enough reviews" }}</span></div>
+{% endif %}
+{% endcapture %}
+
+<script type="text/javascript">
+  function createGauge(score, containerId, opts) {
+    Highcharts.chart(containerId, {
+      chart: {
+        type: "gauge",
+        height: opts.height
+      },
+      title: {
+        text: opts.title
+      },
+      pane: {
+        startAngle: -150,
+        endAngle: 150,
+        background: {
+          backgroundColor: "transparent",
+          borderWidth: 0
+        }
+      },
+      plotOptions: {
+        gauge: {
+          animation: false,
+          pivot: {
+            backgroundColor: "transparent"
+          },
+          dial: {
+            backgroundColor: "transparent",
+            baseWidth: 0,
+          },
+        }
+      },
+      yAxis: {
+        min: 0,
+        max: 100,
+        minorTickInterval: 0,
+        tickColor: "#ffffff",
+        tickLength: 40,
+        tickPixelInterval: 40,
+        tickWidth: 0,
+        lineWidth: 0,
+        title: {
+          text: opts.yAxis.title,
+          style: {
+            color: "#000000",
+            fontFamily: "NicoPups",
+            fontSize: "16px"
+          }
+        },
+        labels: {
+          ...opts.labels,
+          style: {
+            fontSize: "16px"
+          }
+        },
+        plotBands: [{
+          from: 1,
+          to: score,
+          color: {
+            pattern: {
+              image: "https://usetrmnl.com/images/grayscale/gray-2.png",
+              width: 12,
+              height: 12
+            }
+          },
+          innerRadius: "82%",
+          borderRadius: "50%"
+        }, {
+          from: score + 1,
+          to: 100,
+          color: {
+            pattern: {
+              image: "https://usetrmnl.com/images/grayscale/gray-5.png",
+              width: 12,
+              height: 12
+            }
+          },
+          innerRadius: "82%",
+          borderRadius: "50%",
+        }]
+      },
+      series: [{
+        name: "Score",
+        data: [score],
+        dataLabels: {
+          borderWidth: 0,
+          style: {
+            fontSize: opts.series.fontSize,
+            fontWeight: opts.series.fontWeight || "400",
+            fontFamily: opts.series.fontFamily || "inherit"
+          }
+        }
+      }],
+      credits: {
+        enabled: false
+      }
+    });
+  }
+</script>

@@ -1,0 +1,52 @@
+---
+description: TRMNL transform sandbox runtime and plugin API reference
+globs: "**/*.liquid,**/transform.js,**/settings.yml"
+alwaysApply: false
+---
+
+# TRMNL Sandbox Runtime (Transform)
+
+Reference: [Parsing plugins with the Sandbox Runtime](https://help.trmnl.com/en/articles/12996946-parsing-plugins-with-the-sandbox-runtime#h_c906c6f6e6)
+
+## Transform function
+
+- **Where**: Markup Editor → Transform tab. JavaScript runs in the sandbox; returned object becomes the plugin payload.
+- **Signature**: `function transform(input) { return { ... }; }` — `input` is the full original payload.
+- **Runtime**: Node v22, isolated-vm, 1s timeout, no network.
+- **Limit**: Private plugins have a 100 KB max blob from external resources; use the transform to shrink payloads and avoid rejection.
+
+## Accessing TRMNL / form fields
+
+- `input.trmnl` is the TRMNL global node (e.g. form/plugin settings).
+- Custom form field by keyname, e.g. `genre`:
+  `input.trmnl.plugin_settings.custom_fields_values.genre`
+
+## Examples
+
+**Limit array size (e.g. first 30 items):**
+```javascript
+function transform(input) {
+  return {
+    data: {
+      ...input,
+      actions: input.actions.slice(0, 30)
+    }
+  };
+}
+```
+
+**Remove a top-level property:**
+```javascript
+function transform(input) {
+  const { synonyms, ...rest } = input;
+  return { data: rest };
+}
+```
+
+## Conventions
+
+- Return a single object; top-level keys become variables (e.g. `##{{ data }}`).
+- Prefer surfacing needed values at the top level to keep Liquid templates simple.
+- Debug with a large real payload outside TRMNL; use debug logs for lightweight hints.
+
+**See also:** Form builder (custom fields), Dynamic Polling URLs (IDX_0/IDX_1), [Framework v2](https://trmnl.com/framework/docs), [docs.trmnl.com/go](https://docs.trmnl.com/go).

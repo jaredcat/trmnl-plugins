@@ -1,0 +1,47 @@
+---
+description: TRMNL dynamic polling URLs and multi-endpoint payloads
+globs: "**/*.liquid,**/transform.js,**/settings.yml"
+alwaysApply: false
+---
+
+# TRMNL Dynamic Polling URLs
+
+Reference: [Dynamic Polling URLs](https://help.trmnl.com/en/articles/12689499-dynamic-polling-urls)
+
+## Static endpoints
+
+- Enter multiple URLs line-separated in the Polling URL box. Same HTTP Verb for all; formats can differ (JSON, XML, etc.).
+- Endpoints are requested **sequentially**. Responses are merged into index-based nodes:
+
+```json
+{
+  "IDX_0": { "data": "from first URL" },
+  "IDX_1": { "data": "from second URL" },
+  "IDX_2": { "data": "from third URL" }
+}
+```
+
+- In `transform.js`, use `input.IDX_0`, `input.IDX_1`, etc. (e.g. `input.IDX_0?.data`).
+
+## Interpolation in URLs
+
+- Use custom form field values by keyname: `https://api.example.com?access_token=##{{ api_key }}`.
+- Full Liquid is available, e.g. date: `https://api.example.com/posts?since=##{{ "now" | date: "%Y-%m-%d" }}`.
+
+## Dynamic URL list (Liquid)
+
+- Build multiple URLs with Liquid; one URL per line. Split by newlines after rendering.
+- Example (user comma-separated IDs): form field `recipe_ids` (string or multi_string), then:
+
+```liquid
+{% assign ids = recipe_ids | split: "," %}
+{% for id in ids %}https://trmnl.com/recipes/##{{ id }}.json
+{% endfor %}
+```
+
+- Or hardcode: `{% assign recipe_ids = '49610,18267,11914' %}` then same `split`/`for`. Empty lines are ignored.
+
+## Tips
+
+- Use the **Parse** button under the Polling URL box to test Liquid without saving or refreshing.
+- URLs are split on `\r` and `\n` after Liquid runs; avoid producing a single line if you intend multiple URLs.
