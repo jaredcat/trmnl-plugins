@@ -5,6 +5,7 @@ A [TRMNL](https://trmnl.com?ref=krylic) plugin that shows **personalized Steam d
 It fetches deals from [CheapShark](https://www.cheapshark.com) and filters them using your Steam library (via the Steam Web API), then displays a random qualifying deal.
 
 Originally forked from the [Steam Deals of the Day](https://trmnl.com/recipes/18131) recipe.
+Also check out similar Cloudflare Worker: [Steam Deals Worker](https://github.com/jaredcat/steam-deals-worker)
 
 ## Requirements
 

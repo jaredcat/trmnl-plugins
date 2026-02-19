@@ -1,6 +1,6 @@
 # trmnl-plugins
 
-A collection of plugins for [TRMNL](https://trmnl.com) (recipes/widgets for TRMNL displays).
+A collection of plugins for [TRMNL](https://trmnl.com?ref=krylic) (recipes/widgets for TRMNL displays).
 
 ## Structure
 
