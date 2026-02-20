@@ -1,8 +1,10 @@
 # [Personal Steam Deals](https://trmnl.com/recipes/246965)
 
-A [TRMNL](https://trmnl.com?ref=krylic) plugin that shows **personalized Steam deals you don’t already own**.
+![plugin screen](../images/personal-steam-deals.png)
 
-It fetches deals from [CheapShark](https://www.cheapshark.com) and filters them using your Steam library (via the Steam Web API), then displays a random qualifying deal.
+A [TRMNL](https://trmnl.com?ref=krylic) plugin that shows **personalized Steam deals** — either games you don’t own, or (with **Wishlist only**) only games on your Steam wishlist.
+
+It fetches deals from [CheapShark](https://www.cheapshark.com) and filters them using your Steam library and optional wishlist (via the [Steam Web API](https://steamwebapi.azurewebsites.net/)), then displays a random qualifying deal.
 
 Originally forked from the [Steam Deals of the Day](https://trmnl.com/recipes/18131) recipe.
 Also check out similar Cloudflare Worker: [Steam Deals Worker](https://github.com/jaredcat/steam-deals-worker)
@@ -14,13 +16,15 @@ Also check out similar Cloudflare Worker: [Steam Deals Worker](https://github.co
 
 ## How it works
 
-1. **Polling** — The plugin calls two URLs on each refresh:
+1. **Polling** — The plugin calls URLs on each refresh:
    - **CheapShark Deals API** — Deals filtered by store, price, Metacritic, Steam rating, etc. (see settings).
    - **Steam GetOwnedGames** — Your owned games list (using your API key and Steam ID).
+   - **Steam GetWishlist** ([IWishlistService/GetWishlist](https://steamwebapi.azurewebsites.net/)) — Your wishlist (used when **Wishlist only** is enabled).
 
 2. **Transform** — `transform.ts` (compiled to `transform.js` in build):
    - Normalizes deal data and maps store IDs to names.
-   - Filters out any deal whose Steam App ID is in your owned games.
+   - If **Wishlist only** is on: keeps only deals whose Steam App ID is on your wishlist.
+   - Otherwise: filters out any deal whose Steam App ID is in your owned games.
    - Applies optional **Min Discount %** and **Min Deal Rating** from plugin settings.
    - Picks one random deal from the filtered list for display.
 
@@ -30,8 +34,9 @@ Defined in `settings.yml`; key options:
 
 | Setting | Description |
 |--------|-------------|
-| Steam API Key / Steam ID | Required for owned-games filtering. |
+| Steam API Key / Steam ID | Required for owned-games and wishlist filtering. |
 | Store IDs | Comma-separated CheapShark store IDs (default `1,3,11,15` = Steam, GreenManGaming, Humble, Fanatical). [Full list](https://apidocs.cheapshark.com/#a2620d3f-683e-0396-61e7-3fe4d30ea376). |
+| Wishlist only | When enabled, show deals only for games on your Steam wishlist (uses Steam’s IWishlistService/GetWishlist). |
 | Max Deal Age, Upper/Lower Price | Time and price filters for the CheapShark request. |
 | Min Metacritic / Min Steam Rating / Min Review Count | Quality filters (CheapShark API). |
 | AAA Only | Only deals with retail price &gt; $29. |
