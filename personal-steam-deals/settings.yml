@@ -42,6 +42,7 @@ custom_fields:
     placeholder: false
     default: false
     optional: true
+    help_text: Can cause the screen to find no deals.
   - keyname: store_ids
     field_type: string
     name: Store IDs

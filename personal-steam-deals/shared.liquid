@@ -39,10 +39,13 @@
 
 <script type="text/javascript">
   function createGauge(score, containerId, opts) {
+    const container = document.getElementById(containerId);
+    if (!container || container.clientWidth === 0) return;
+    const narrow = container.clientWidth < 180;
     Highcharts.chart(containerId, {
       chart: {
         type: "gauge",
-        height: opts.height
+        height: container.clientHeight > 0 ? null : opts.height
       },
       title: {
         text: opts.title
@@ -72,8 +75,8 @@
         max: 100,
         minorTickInterval: 0,
         tickColor: "#ffffff",
-        tickLength: 40,
-        tickPixelInterval: 40,
+        tickLength: narrow ? 12 : 40,
+        tickPixelInterval: narrow ? 24 : 40,
         tickWidth: 0,
         lineWidth: 0,
         title: {
@@ -81,13 +84,13 @@
           style: {
             color: "#000000",
             fontFamily: "NicoPups",
-            fontSize: "16px"
+            fontSize: narrow ? "12px" : "16px"
           }
         },
         labels: {
           ...opts.labels,
           style: {
-            fontSize: "16px"
+            fontSize: narrow ? "12px" : "16px"
           }
         },
         plotBands: [{
@@ -122,7 +125,7 @@
         dataLabels: {
           borderWidth: 0,
           style: {
-            fontSize: opts.series.fontSize,
+            fontSize: narrow ? "16px" : opts.series.fontSize,
             fontWeight: opts.series.fontWeight || "400",
             fontFamily: opts.series.fontFamily || "inherit"
           }

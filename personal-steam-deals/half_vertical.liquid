@@ -1,22 +1,22 @@
 {% assign chart_id = "rating_1" | append_random %}
-<div class="layout layout--col">
+<div class="layout layout--col portrait:layout--top">
 {% if dealInfo %}
   <div class="item">
     <div class="content gap--xsmall">
-      <span class="title">{{ dealInfo.title }}</span>
+      <span class="title" data-clamp="2">{{ dealInfo.title }}</span>
       <div class="flex flex--row gap--xsmall flex--center-y">
         <img class="image w--5 h--5" src="{{ dealInfo.storeIconUrl }}" alt="" aria-hidden="true">
         <span class="label">{{ dealInfo.storeName }}</span>
       </div>
     </div>
   </div>
-  <img class="image image-dither w--70 h--28" src="{{ dealInfo.thumb }}" alt="">
-  <div id="{{ chart_id }}" class="h--28"></div>
-  {{ steam_rating_label }}
-    <span class="value value--tnums">{{ dealInfo.salePrice | default 0.00 | number_to_currency }}</span>
+  <img class="image image-dither image--contain w--full h--[18cqh]" src="{{ dealInfo.thumb }}" alt="">
+  <div id="{{ chart_id }}" class="h--[20cqh] w--full portrait:hidden lg:portrait:block"></div>
+  <div class="portrait:hidden lg:portrait:block">{{ steam_rating_label }}</div>
+    <span class="value portrait:value--small lg:portrait:value--large value--tnums" data-fit-value="true">{{ dealInfo.salePrice | default 0.00 | number_to_currency }}</span>
 
 
-    <div class="flex flex--row gap--xlarge">
+    <div class="flex flex--row portrait:flex--col lg:portrait:flex--row gap--xlarge portrait:gap--small">
       <div class="item">
         <div class="meta"></div>
         <div class="content">
@@ -57,7 +57,7 @@
   {% endif %}
 </script>
 {% else %}
-  <div class="flex flex--col flex--center gap--small" style="padding: 1rem;">
+  <div class="flex flex--col flex--center gap--small p--4">
     <span class="label">No deals match your filters.</span>
     <span class="label text--muted">{{ filteredCount }} of {{ totalDeals }} passed.</span>
   </div>

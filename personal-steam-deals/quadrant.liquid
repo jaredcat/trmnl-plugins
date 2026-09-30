@@ -1,17 +1,17 @@
-<div class="layout layout--col">
+<div class="layout layout--col portrait:layout--top">
 {% if dealInfo %}
   <div class="item">
     <div class="content gap--xsmall">
-      <span class="title">{{ dealInfo.title }}</span>
+      <span class="title" data-clamp="2">{{ dealInfo.title }}</span>
       <div class="flex flex--row gap--xsmall flex--center-y">
         <img class="image w--5 h--5" src="{{ dealInfo.storeIconUrl }}" alt="" aria-hidden="true">
-        <span class="label">{{ dealInfo.storeName }}</span>
+        <span class="label" data-clamp="1">{{ dealInfo.storeName }}</span>
       </div>
-      <span class="label label--inverted">{{ dealInfo.steamRatingText | default: "no reviews" }}</span>
+      <span class="label label--inverted" data-clamp="1">{{ dealInfo.steamRatingText | default: "no reviews" }}</span>
     </div>
   </div>
-  <span class="value value--xlarge value--tnums">{{ dealInfo.salePrice | default 0 | number_to_currency }}</span>
-  <div class="grid grid--cols-2">
+  <span class="value value--xlarge portrait:value--large lg:portrait:value--xlarge value--tnums" data-fit-value="true">{{ dealInfo.salePrice | default 0 | number_to_currency }}</span>
+  <div class="grid grid--wrap grid--min-28 portrait:grid--cols-1 lg:portrait:grid--cols-2">
     <div class="item">
       <div class="meta"></div>
       <div class="content">
@@ -28,7 +28,7 @@
     </div>
   </div>
 {% else %}
-  <div class="flex flex--col flex--center gap--small" style="padding: 1rem;">
+  <div class="flex flex--col flex--center gap--small p--4">
     <span class="label">No deals match your filters.</span>
     <span class="label text--muted">{{ filteredCount }} of {{ totalDeals }} passed.</span>
   </div>

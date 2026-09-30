@@ -1,19 +1,19 @@
 {% assign chart_id = "rating_1" | append_random %}
-<div class="layout layout--col">
+<div class="layout layout--col portrait:layout--top">
 {% if dealInfo %}
-  <span class="title">{{ dealInfo.title }}</span>
+  <span class="title" data-clamp="2">{{ dealInfo.title }}</span>
   <div class="flex flex--row gap--xsmall flex--center-y">
     <img class="image w--5 h--5" src="{{ dealInfo.storeIconUrl }}" alt="" aria-hidden="true">
     <span class="label">{{ dealInfo.storeName }}</span>
   </div>
   <div class="w--full border--h-45"></div>
 
-  <div class="grid">
+  <div class="grid grid--wrap grid--min-48 portrait:grid--cols-1 lg:portrait:grid--cols-2">
     <div class="col--span-1">
       <div class="flex flex--col gap--small w--full flex--center">
-        <img class="image image-dither w--70 h--28" src="{{ dealInfo.thumb }}" alt="">
+        <img class="image image-dither image--contain w--full h--28 portrait:h--[22cqh]" src="{{ dealInfo.thumb }}" alt="">
         <span class="value value--xlarge value--tnums" data-fit-value="true">{{ dealInfo.salePrice | default 0 | number_to_currency }}</span>
-        <div class="flex flex--row gap--xlarge">
+        <div class="flex flex--row gap--xlarge portrait:gap--small lg:portrait:gap--xlarge">
           <div class="item">
             <div class="meta"></div>
             <div class="content">
@@ -32,23 +32,20 @@
       </div>
     </div>
 
-    <div class="grid col--center">
+    <div class="grid col--center portrait:w--full">
       <div class="w--full">
-        <div id="{{ chart_id }}" class="col--center"></div>
+        <div id="{{ chart_id }}" class="col--center w--full h--[36cqh]"></div>
         <div class="flex flex--col flex--center w--full">
           {{ steam_rating_label }}
         </div>
       </div>
     </div>
   </div>
-</div>
-
-{{ title_bar }}
 
 <script type="text/javascript">
   let opts = {
     title: null,
-    height: "80%",
+    height: null,
     labels: { enabled: false },
     series: {
       fontSize: "3em",
@@ -73,10 +70,11 @@
 
 </script>
 {% else %}
-  {{ title_bar }}
-  <div class="flex flex--col flex--center gap--small" style="padding: 1rem;">
+  <div class="flex flex--col flex--center gap--small p--4">
     <span class="label">No deals match your filters right now.</span>
     <span class="label text--muted">{{ filteredCount }} of {{ totalDeals }} deals passed (you own {{ ownedCount }} games).</span>
   </div>
 {% endif %}
 </div>
+
+{{ title_bar }}
