@@ -33,7 +33,7 @@ Also check out similar Cloudflare Worker: [Steam Deals Worker](https://github.co
 Defined in `settings.yml`; key options:
 
 | Setting | Description |
-|--------|-------------|
+| -------- | ------------- |
 | Steam API Key / Steam ID | Required for owned-games and wishlist filtering. |
 | Store IDs | Comma-separated CheapShark store IDs (default `1,3,11,15` = Steam, GreenManGaming, Humble, Fanatical). [Full list](https://apidocs.cheapshark.com/#a2620d3f-683e-0396-61e7-3fe4d30ea376). |
 | Wishlist only | When enabled, show deals only for games on your Steam wishlist (uses Steam’s IWishlistService/GetWishlist). |

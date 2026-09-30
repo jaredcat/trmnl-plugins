@@ -3,45 +3,45 @@
  * @see Stores Info endpoint https://apidocs.cheapshark.com/
  */
 const STORE_NAMES: Record<string, string> = {
-  "1": "Steam",
-  "2": "GamersGate",
-  "3": "GreenManGaming",
-  "4": "Amazon",
-  "5": "GameStop",
-  "6": "Direct2Drive",
-  "7": "GOG",
-  "8": "Origin",
-  "9": "Get Games",
-  "10": "Shiny Loot",
-  "11": "Humble Store",
-  "12": "Desura",
-  "13": "Uplay",
-  "14": "IndieGameStand",
-  "15": "Fanatical",
-  "16": "Gamesrocket",
-  "17": "Games Republic",
-  "18": "SilaGames",
-  "19": "Playfield",
-  "20": "ImperialGames",
-  "21": "WinGameStore",
-  "22": "FunStockDigital",
-  "23": "GameBillet",
-  "24": "Voidu",
-  "25": "Epic Games Store",
-  "26": "Razer Game Store",
-  "27": "Gamesplanet",
-  "28": "Gamesload",
-  "29": "2Game",
-  "30": "IndieGala",
-  "31": "Blizzard Shop",
-  "32": "AllYouPlay",
-  "33": "DLGamer",
-  "34": "Noctre",
-  "35": "DreamGame",
+  '1': 'Steam',
+  '2': 'GamersGate',
+  '3': 'GreenManGaming',
+  '4': 'Amazon',
+  '5': 'GameStop',
+  '6': 'Direct2Drive',
+  '7': 'GOG',
+  '8': 'Origin',
+  '9': 'Get Games',
+  '10': 'Shiny Loot',
+  '11': 'Humble Store',
+  '12': 'Desura',
+  '13': 'Uplay',
+  '14': 'IndieGameStand',
+  '15': 'Fanatical',
+  '16': 'Gamesrocket',
+  '17': 'Games Republic',
+  '18': 'SilaGames',
+  '19': 'Playfield',
+  '20': 'ImperialGames',
+  '21': 'WinGameStore',
+  '22': 'FunStockDigital',
+  '23': 'GameBillet',
+  '24': 'Voidu',
+  '25': 'Epic Games Store',
+  '26': 'Razer Game Store',
+  '27': 'Gamesplanet',
+  '28': 'Gamesload',
+  '29': '2Game',
+  '30': 'IndieGala',
+  '31': 'Blizzard Shop',
+  '32': 'AllYouPlay',
+  '33': 'DLGamer',
+  '34': 'Noctre',
+  '35': 'DreamGame',
 };
 
 /** CheapShark store icon base URL; icon path is /img/stores/icons/{index}.png (index = storeID - 1) */
-const CHEAPSHARK_ICON_BASE = "https://www.cheapshark.com/img/stores/icons";
+const CHEAPSHARK_ICON_BASE = 'https://www.cheapshark.com/img/stores/icons';
 
 /** Raw deal from CheapShark API (IDX_0.data items) */
 interface RawDeal {
@@ -130,31 +130,43 @@ interface TransformOutput {
   wishlistCount: number;
 }
 
-function parseWishlistAppIdsFromApi(apiResponse: SteamWishlistResponse | undefined): number[] {
-  if (!apiResponse?.response || typeof apiResponse.response !== "object") return [];
+function noAppIds(): number[] {
+  return new Array<number>();
+}
+
+function parseWishlistAppIdsFromApi(
+  apiResponse: SteamWishlistResponse | undefined,
+): number[] {
+  if (!apiResponse?.response || typeof apiResponse.response !== 'object')
+    return noAppIds();
   const r = apiResponse.response as Record<string, unknown>;
   // IWishlistService/GetWishlist returns response.items with { appid, priority, date_added }
   if (Array.isArray(r.items)) {
-    return r.items
-      .map((item) => (item && typeof item === "object" && "appid" in item ? (item as { appid: number }).appid : NaN))
-      .filter((n): n is number => typeof n === "number" && Number.isInteger(n));
+    return r.items.flatMap((item) => {
+      if (!item || typeof item !== "object" || !("appid" in item)) return noAppIds();
+      const appid = (item as { appid: number }).appid;
+      return Number.isInteger(appid) ? [appid] : noAppIds();
+    });
   }
   if (Array.isArray(r.rgWishlist)) {
-    return r.rgWishlist.filter((n): n is number => typeof n === "number" && Number.isInteger(n));
+    return r.rgWishlist.filter(
+      (n): n is number => typeof n === 'number' && Number.isInteger(n),
+    );
   }
-  for (const key of Object.keys(r)) {
-    const val = r[key];
-    if (Array.isArray(val) && val.every((n) => typeof n === "number")) {
+  for (const val of Object.values(r)) {
+    if (Array.isArray(val) && val.every((n) => typeof n === 'number')) {
       return val as number[];
     }
   }
-  return [];
+  return noAppIds();
 }
 
 function transform(input: TransformInput): TransformOutput {
   const rawDeals = Array.isArray(input.IDX_0?.data) ? input.IDX_0.data : [];
   const steamResponse = input.IDX_1?.response ?? {};
-  const wishlistAppIds = new Set<number>(parseWishlistAppIdsFromApi(input.IDX_2));
+  const wishlistAppIds = new Set<number>(
+    parseWishlistAppIdsFromApi(input.IDX_2),
+  );
   const games = Array.isArray(steamResponse.games) ? steamResponse.games : [];
   const ownedAppIds = new Set(games.map((g) => g.appid));
 
@@ -170,7 +182,7 @@ function transform(input: TransformInput): TransformOutput {
   }
 
   function normalizeDeal(raw: RawDeal): NormalizedDeal {
-    const storeIdNum = parseInt(raw.storeID, 10) || 0;
+    const storeIdNum = Math.trunc(Number(raw.storeID)) || 0;
     const iconIndex = Math.max(0, storeIdNum - 1);
     return {
       dealId: raw.dealID,
@@ -191,16 +203,17 @@ function transform(input: TransformInput): TransformOutput {
       releaseDate: raw.releaseDate,
       lastChange: raw.lastChange,
       thumb: raw.thumb,
-      internalName: raw.internalName
+      internalName: raw.internalName,
     };
   }
 
   const deals = rawDeals.map(normalizeDeal);
   const filtered = deals.filter((d) => {
-    const savings = parseFloat(String(d.savings)) || 0;
-    const rating = parseFloat(String(d.dealRating)) || 0;
-    const appId = parseInt(String(d.steamAppId), 10);
-    const passesSavingsAndRating = savings >= minSaving && rating >= minDealRating;
+    const savings = Number(d.savings) || 0;
+    const rating = Number(d.dealRating) || 0;
+    const appId = Math.trunc(Number(d.steamAppId));
+    const passesSavingsAndRating =
+      savings >= minSaving && rating >= minDealRating;
     if (wishlistOnly) {
       return passesSavingsAndRating && wishlistAppIds.has(appId);
     }
@@ -208,16 +221,22 @@ function transform(input: TransformInput): TransformOutput {
     return passesSavingsAndRating && notOwned;
   });
 
-  let dealInfo: NormalizedDeal | null = null;
-  if (filtered.length > 0) {
-    dealInfo = filtered[Math.floor(Math.random() * filtered.length)];
-  }
+  const dealInfo =
+    filtered.length > 0
+      ? filtered[
+          Math.floor(
+            // Display shuffle only. Not used for secrets or identifiers.
+            // eslint-disable-next-line sonarjs/pseudo-random -- deal picker, not a secret
+            Math.random() * filtered.length,
+          )
+        ]
+      : null;
 
   return {
     dealInfo,
     totalDeals: deals.length,
     filteredCount: filtered.length,
     ownedCount: ownedAppIds.size,
-    wishlistCount: wishlistAppIds.size
+    wishlistCount: wishlistAppIds.size,
   };
 }

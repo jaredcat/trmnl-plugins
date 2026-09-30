@@ -8,8 +8,8 @@ Each plugin lives in its own directory at the repo root. A **plugin** is any dir
 
 ## Plugins
 
-| Plugin | Description |
-|--------|-------------|
+| Plugin                                        | Description                                    |
+| --------------------------------------------- | ---------------------------------------------- |
 | [personal-steam-deals](personal-steam-deals/) | Personalized Steam deals you don’t already own |
 
 ## Development
@@ -34,6 +34,18 @@ The build script:
 4. Zips each plugin as `dist/<plugin>.zip`
 
 Output is in the `dist/` folder. Use the contents of a plugin folder or the corresponding zip when installing or sharing a plugin.
+
+Each plugin pins a Framework CSS release in `settings.yml` (`framework_version: "3.4.0"`). That is the release TRMNL renders, so a later Framework publish does not change the plugin until you edit the pin. After importing a zip, confirm the plugin settings show 3.4.0 and not “Always track latest”. See [UI Framework versioning](https://help.trmnl.com/en/articles/14135346-ui-framework-versioning).
+
+### Lint
+
+```bash
+npm run lint
+```
+
+ESLint runs [SonarJS](https://github.com/SonarSource/eslint-plugin-sonarjs), Unicorn, and typescript-eslint. `tsc --noEmit` then typechecks the same files. A plugin check covers settings and Liquid: the Framework pin, form fields, and classes that are missing from Framework 3.4. `npm run lint:fix` applies ESLint fixes, then runs the typecheck and plugin check.
+
+TypeScript stays on 6.0.x because `eslint-plugin-sonarjs` and `typescript-eslint` both require `typescript < 6.1`.
 
 ### Clean
 

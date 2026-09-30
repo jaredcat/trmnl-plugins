@@ -2,11 +2,20 @@
   "name": "trmnl-plugins",
   "private": true,
   "scripts": {
-    "build": "node scripts/build.mjs",
+    "build": "node scripts/build.mts",
+    "lint": "eslint . && tsc --noEmit && node scripts/lint-trmnl.mts",
+    "lint:fix": "eslint . --fix && tsc --noEmit && node scripts/lint-trmnl.mts",
     "clean": "node -e \"require('fs').rmSync('dist', { recursive: true, force: true })\""
   },
   "devDependencies": {
-    "archiver": "^7.0.1",
-    "typescript": "^5.9.3"
+    "@types/archiver": "^8.0.0",
+    "@types/node": "^26.6.3",
+    "archiver": "^8.0.0",
+    "eslint": "^10.11.0",
+    "eslint-plugin-sonarjs": "^4.2.2",
+    "eslint-plugin-unicorn": "^76.0.0",
+    "typescript": ">=6.0.3 <6.1.0",
+    "typescript-eslint": "^8.71.0",
+    "yaml": "^2.9.1"
   }
 }

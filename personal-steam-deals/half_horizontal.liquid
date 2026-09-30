@@ -13,7 +13,7 @@
 
   <div class="grid grid--cols-3">
     <div class="col col--start">
-      <img class="image image-dither image--contain w--70 h--28" src="{{ dealInfo.thumb }}" alt="">    
+      <img class="image image-dither image--contain w--70 h--28" src="{{ dealInfo.thumb }}" alt="">
     </div>
     <div class="col col--center">
       <div class="w--full">
@@ -74,7 +74,7 @@
 {% else %}
   <div class="flex flex--col flex--center gap--small" style="padding: 1rem;">
     <span class="label">No deals match your filters.</span>
-    <span class="label label--muted">{{ filteredCount }} of {{ totalDeals }} passed.</span>
+    <span class="label text--muted">{{ filteredCount }} of {{ totalDeals }} passed.</span>
   </div>
 {% endif %}
 </div>

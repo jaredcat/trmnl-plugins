@@ -6,7 +6,7 @@
     <img class="image w--5 h--5" src="{{ dealInfo.storeIconUrl }}" alt="" aria-hidden="true">
     <span class="label">{{ dealInfo.storeName }}</span>
   </div>
-  <div class="w-full b-h-gray-1"></div>
+  <div class="w--full border--h-45"></div>
 
   <div class="grid">
     <div class="col--span-1">
@@ -46,7 +46,7 @@
 {{ title_bar }}
 
 <script type="text/javascript">
-  let opts = {     
+  let opts = {
     title: null,
     height: "80%",
     labels: { enabled: false },
@@ -76,7 +76,7 @@
   {{ title_bar }}
   <div class="flex flex--col flex--center gap--small" style="padding: 1rem;">
     <span class="label">No deals match your filters right now.</span>
-    <span class="label label--muted">{{ filteredCount }} of {{ totalDeals }} deals passed (you own {{ ownedCount }} games).</span>
+    <span class="label text--muted">{{ filteredCount }} of {{ totalDeals }} deals passed (you own {{ ownedCount }} games).</span>
   </div>
 {% endif %}
 </div>
