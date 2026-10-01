@@ -81,6 +81,7 @@
         lineWidth: 0,
         title: {
           text: opts.yAxis.title,
+          y: narrow ? -4 : -16,
           style: {
             color: "#000000",
             fontFamily: "NicoPups",
@@ -124,6 +125,7 @@
         data: [score],
         dataLabels: {
           borderWidth: 0,
+          y: narrow ? 8 : 18,
           style: {
             fontSize: narrow ? "16px" : opts.series.fontSize,
             fontWeight: opts.series.fontWeight || "400",

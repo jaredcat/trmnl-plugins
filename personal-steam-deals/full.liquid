@@ -8,8 +8,8 @@
   </div>
   <div class="w--full border--h-45"></div>
 
-  <div class="grid grid--wrap grid--min-48 portrait:grid--cols-1 lg:portrait:grid--cols-2">
-    <div class="col--span-1">
+  <div class="grid grid--cols-2 portrait:grid--cols-1 lg:portrait:grid--cols-2">
+    <div>
       <div class="flex flex--col gap--small w--full flex--center">
         <img class="image image-dither image--contain w--full h--28 portrait:h--[22cqh]" src="{{ dealInfo.thumb }}" alt="">
         <span class="value value--xlarge value--tnums" data-fit-value="true">{{ dealInfo.salePrice | default 0 | number_to_currency }}</span>
@@ -32,13 +32,9 @@
       </div>
     </div>
 
-    <div class="grid col--center portrait:w--full">
-      <div class="w--full">
-        <div id="{{ chart_id }}" class="col--center w--full h--[36cqh]"></div>
-        <div class="flex flex--col flex--center w--full">
-          {{ steam_rating_label }}
-        </div>
-      </div>
+    <div class="flex flex--col flex--center w--full">
+      <div id="{{ chart_id }}" class="w--full h--[58cqh] portrait:h--[28cqh]"></div>
+      {{ steam_rating_label }}
     </div>
   </div>
 
